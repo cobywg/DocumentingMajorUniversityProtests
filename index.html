@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Colleges Map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web|Oswald" rel="stylesheet">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Titillium Web', serif;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .mapboxgl-marker.mapboxgl-marker-anchor-center {
+            background-image: none !important; /* Remove default marker background */
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+
+        .popup-content {
+            max-height: 200px; /* Maximum height of the popup content */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+
+        .sidebar {
+            width: 300px;
+            background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            padding: 20px;
+            overflow-y: auto;
+        }
+    </style>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+</head>
+
+<body>
+    <div id="map"></div>
+    <div class="sidebar">
+        <!-- Sidebar content goes here -->
+        <h2>Sidebar</h2>
+        <p>This is the sidebar content.</p>
+    </div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
+
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-95.7129, 37.0902],
+            zoom: 3
+        });
+
+        map.on('load', function () {
+            // Define the asynchronous function to load geojson data
+            async function geojsonFetch() {
+                try {
+                    let response = await fetch('assets/college.geojson');
+                    let colleges = await response.json();
+
+                    // Filter colleges to include only US colleges
+                    colleges.features = colleges.features.filter(feature => feature.properties.COUNTRY === 'USA');
+
+                    const desiredUniversityNames = ['UNIVERSITY OF WASHINGTON-SEATTLE CAMPUS', 'PRINCETON UNIVERSITY', 'MASSACHUSETTS INSTITUTE OF TECHNOLOGY', 'HARVARD UNIVERSITY', 'STANFORD UNIVERSITY', 'YALE UNIVERSITY',  'DUKE UNIVERSITY', 'BROWN UNIVERSITY',  'COLUMBIA UNIVERSITY IN THE CITY OF NEW YORK', 'CORNELL UNIVERSITY', 'UNIVERSITY OF CHICAGO', 'UNIVERSITY OF CALIFORNIA-BERKELEY', 'UNIVERSITY OF CALIFORNIA-LOS ANGELES', 'DARTMOUTH COLLEGE',  'UNIVERSITY OF FLORIDA',  'THE UNIVERSITY OF TEXAS AT AUSTIN',  'NEW YORK UNIVERSITY',  'UNIVERSITY OF WISCONSIN-MADISON', 'BOSTON COLLEGE', 'UNIVERSITY OF PORTLAND'];
+                    colleges.features = colleges.features.filter(feature => desiredUniversityNames.includes(feature.properties.NAME));
+
+                    // Convert EPSG:3857 coordinates to standard [longitude, latitude] format
+                    colleges.features.forEach(feature => {
+                        let coords = proj4('EPSG:3857', 'EPSG:4326', feature.geometry.coordinates);
+                        feature.geometry.coordinates = [coords[0], coords[1]];
+                    });
+
+                    // Load and display the colleges data
+                    console.log('Colleges Data:', colleges); // Log the colleges data
+                    map.addSource('colleges', {
+                        type: 'geojson',
+                        data: colleges
+                    });
+
+                    // Set default marker opacity to 0
+                    map.setLayoutProperty('icon', 'icon-opacity', 0);
+
+                    // Add popups to the colleges
+                    colleges.features.forEach(feature => {
+                        console.log('Creating marker for:', feature.properties.NAME); // Log the name of each college
+                        const name = feature.properties.NAME;
+                        const isUW = name === 'UNIVERSITY OF WASHINGTON-SEATTLE CAMPUS';
+                        const isUCLA = name === 'UNIVERSITY OF CALIFORNIA-LOS ANGELES';
+                        const isPL = name === 'UNIVERSITY OF PORTLAND';
+                        const imageSrc = 'assets/About-main1.1.jpg';
+                        const imageUCLA = 'assets/ucla4.jpeg'
+                        const imagePORT = 'assets/portland2.jpeg'
+                        let description = '';
+
+                        if (isUW) {
+                            description = `
+                                <img src="${imageSrc}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 12:</p>
+                                        <p>This was the first free Palestine protest at the University of Washington since the conflict started again on October 7th. This protest was located at Red Square and hundreds of students, non-students, and media showed up. At this protest, there were some counter-protesters holding Israeli flags. According to the media, there were several fights that had to be broken up. An article of this event is located <a href="https://www.kuow.org/stories/tensions-run-high-at-uw-pro-palestine-rally">here</a></p>
+                                        <p>December 8th:</p>
+                                        <p>This protest consisted of occupying Gerberding Hall throughout the day and into the evening. The protesters were located right outside of the University of Washington's president's office. Since the protesters refused to leave the cops were sent in and arrested 36 pro-palestine protesters. An article of this event is located <a href="https://www.kiro7.com/news/local/protesters-occupy-outside-uws-presidents-office-demanding-all-ties-israel-cut/AOQFTBVVMJHKJFVAC5Y2BSIPEY/">here</a></p>
+                                        <p>April 4th:</p>
+                                        <p>This protest consisted of protesters sitting in at the HUB overnight. The University of Washington decided to not intervene. The protesters put graffiti all over the HUB. The protesters peacefully left at around 5:30 am April 5th. An event of this article is located  <a href="https://www.dailyuw.com/news/university-allows-pro-palestinian-protesters-to-occupy-hub-overnight/article_5b7f34d6-f3bd-11ee-b12b-f7fef8fdf2b6.html">here</a>  </p>
+                                        <p>May 1st:</p>
+                                        <p>This protest is an encampment that is set up by protesters to occupy the quad until their demands are met. The encampment seems to have grown since it started and the University officials seem to be silent currently. People at this encampment have been seen stealing and destroying Israeli flags and also blocking Jewish students from entering the encampment. An article of this event is located <a href="https://www.seattletimes.com/seattle-news/protesters-start-second-encampment-demanding-uw-end-ties-with-israel/">here</a></p>
+                                        <p><p/>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>October 10th<p/> 
+                                        <p>The only demonstration on UW's campus that I was able to find was from October 7th when Jewish people met up at Red Square to mourn the lives lost on October 7th. Other than events there have been some counter-protesters seen at Palestinian protests but not any major protest in support of Israel or the Jewish people.<p/>   
+                                    </div>
+                                `;
+
+                        } else if (isUCLA) {
+                            description = `
+                            <img src="${imageUCLA}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isPL) {
+                            description = `
+                            <img src="${imagePORT}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                            
+                        }  else {
+                            description = `<h3>${name}</h3>`; // For other colleges, just display the name
+                        }
+
+                        const popup = new mapboxgl.Popup({
+                            anchor: 'top',
+                            maxWidth: '400px'
+                        }).setHTML(description);
+
+                        new mapboxgl.Marker()
+                            .setLngLat(feature.geometry.coordinates)
+                            .setPopup(popup)
+                            .addTo(map);
+                    });
+                } catch (error) {
+                    console.error('Error loading geojson data:', error);
+                }
+            }
+
+            // Call the geojson loading function
+            geojsonFetch();
+        });
+    </script>
+
+</body>
+
+</html>
