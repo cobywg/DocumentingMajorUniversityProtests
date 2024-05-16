@@ -36,14 +36,76 @@
 
         .sidebar {
             width: 300px;
-            background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+            background-color: #11143baa; /* Darker blue background */
+            color: #ffffff; /* White text color */
             position: absolute;
             top: 0;
             right: 0;
             bottom: 0;
             padding: 20px;
             overflow-y: auto;
+            font-family: 'Titillium Web', sans-serif; /* Optional: Use a specific font */
         }
+
+        .sidebar h2 {
+            font-size: 24px; /* Title font size */
+            margin-bottom: 20px; /* Add some space below the title */
+        }
+
+        .sidebar-section {
+            margin-bottom: 20px; /* Add some space between sections */
+        }
+
+        .sidebar-section h3 {
+            font-size: 20px; /* Section title font size */
+            margin-bottom: 10px; /* Add some space below the section title */
+        }
+
+
+        .popup-content {
+            max-height: 200px; /* Maximum height of the popup content */
+            overflow-y: auto; /* Enable vertical scrolling */
+            margin: 0; /* Remove any margin */
+            padding: 0; /* Remove any padding */
+        }
+
+        .popup-image {
+            width: 100%; /* Make the image fill the entire width of the popup */
+            margin: 0; /* Remove any margin */
+            padding: 0; /* Remove any padding */
+            border-radius: 5px; /* Optionally, add border-radius for rounded corners */
+        }
+       /* Animation */
+/* Animation */
+/* Animation */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+
+    }
+    to {
+        opacity: 1;
+
+    }
+}
+
+.mapboxgl-popup {
+    animation: slideIn 0.3s ease-in-out;
+    opacity: 0;
+    animation-fill-mode: forwards; /* Keeps the last keyframe of the animation */
+    /* Initial position */
+    background-color: transparent; /* Set background color to transparent */
+    max-width: 400px; /* Adjust max-width as needed */
+}
+
+
+
+
+        /* Hide initially */
+        .mapboxgl-popup.mapboxgl-popup-anchor-bottom {
+            transform: translateY(100%);
+        }
+
     </style>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
@@ -52,9 +114,19 @@
 <body>
     <div id="map"></div>
     <div class="sidebar">
-        <!-- Sidebar content goes here -->
-        <h2>Sidebar</h2>
-        <p>This is the sidebar content.</p>
+        <h2>Sidebar Title</h2>
+    
+        <div class="sidebar-section">
+            <h3>Section 1</h3>
+            <p>Content for Section 1 goes here.</p>
+        </div>
+    
+        <div class="sidebar-section">
+            <h3>Section 2</h3>
+            <p>Content for Section 2 goes here.</p>
+        </div>
+    
+        <!-- Add more sections as needed -->
     </div>
 
     <script>
@@ -62,7 +134,7 @@
 
         var map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11',
+            style: 'mapbox://styles/mapbox/navigation-night-v1',
             center: [-95.7129, 37.0902],
             zoom: 3
         });
@@ -77,7 +149,7 @@
                     // Filter colleges to include only US colleges
                     colleges.features = colleges.features.filter(feature => feature.properties.COUNTRY === 'USA');
 
-                    const desiredUniversityNames = ['UNIVERSITY OF WASHINGTON-SEATTLE CAMPUS', 'PRINCETON UNIVERSITY', 'MASSACHUSETTS INSTITUTE OF TECHNOLOGY', 'HARVARD UNIVERSITY', 'STANFORD UNIVERSITY', 'YALE UNIVERSITY',  'DUKE UNIVERSITY', 'BROWN UNIVERSITY',  'COLUMBIA UNIVERSITY IN THE CITY OF NEW YORK', 'CORNELL UNIVERSITY', 'UNIVERSITY OF CHICAGO', 'UNIVERSITY OF CALIFORNIA-BERKELEY', 'UNIVERSITY OF CALIFORNIA-LOS ANGELES', 'DARTMOUTH COLLEGE',  'UNIVERSITY OF FLORIDA',  'THE UNIVERSITY OF TEXAS AT AUSTIN',  'NEW YORK UNIVERSITY',  'UNIVERSITY OF WISCONSIN-MADISON', 'BOSTON COLLEGE', 'UNIVERSITY OF PORTLAND'];
+                    const desiredUniversityNames = ['UNIVERSITY OF WASHINGTON-SEATTLE CAMPUS', 'PRINCETON UNIVERSITY', 'MASSACHUSETTS INSTITUTE OF TECHNOLOGY', 'HARVARD UNIVERSITY', 'STANFORD UNIVERSITY', 'YALE UNIVERSITY',  'DUKE UNIVERSITY',   'COLUMBIA UNIVERSITY IN THE CITY OF NEW YORK', 'CORNELL UNIVERSITY', 'UNIVERSITY OF CHICAGO', 'UNIVERSITY OF CALIFORNIA-BERKELEY', 'UNIVERSITY OF CALIFORNIA-LOS ANGELES',  'UNIVERSITY OF FLORIDA',  'THE UNIVERSITY OF TEXAS AT AUSTIN',  'NEW YORK UNIVERSITY',  'UNIVERSITY OF WISCONSIN-MADISON', 'UNIVERSITY OF PORTLAND'];
                     colleges.features = colleges.features.filter(feature => desiredUniversityNames.includes(feature.properties.NAME));
 
                     // Convert EPSG:3857 coordinates to standard [longitude, latitude] format
@@ -102,15 +174,44 @@
                         const name = feature.properties.NAME;
                         const isUW = name === 'UNIVERSITY OF WASHINGTON-SEATTLE CAMPUS';
                         const isUCLA = name === 'UNIVERSITY OF CALIFORNIA-LOS ANGELES';
+                        const isHARV = name === 'HARVARD UNIVERSITY';
+                        const isBERK = name === 'UNIVERSITY OF CALIFORNIA-BERKELEY';
+                        const isMIT = name === 'MASSACHUSETTS INSTITUTE OF TECHNOLOGY';
+                        const isPRINCE = name === 'PRINCETON UNIVERSITY';
+                        const isSTAN = name === 'STANFORD UNIVERSITY';
+                        const isYALE = name === 'YALE UNIVERSITY';
+                        const isCOL = name === 'COLUMBIA UNIVERSITY IN THE CITY OF NEW YORK';
+                        const isCORN = name === 'CORNELL UNIVERSITY';
+                        const isDUKE = name === 'DUKE UNIVERSITY';
+                        const isFLOR = name === 'UNIVERSITY OF FLORIDA';
+                        const isTEX = name === 'THE UNIVERSITY OF TEXAS AT AUSTIN';
+                        const isNYC = name === 'NEW YORK UNIVERSITY';
+                        const isUWM = name === 'UNIVERSITY OF WISCONSIN-MADISON';
+                        const isCHIG = name === 'UNIVERSITY OF CHICAGO';
                         const isPL = name === 'UNIVERSITY OF PORTLAND';
+
                         const imageSrc = 'assets/About-main1.1.jpg';
+                        const imageHARV = 'assets/harv.jpeg'
+                        const imageDUKE = 'assets/duke.jpeg'
+                        const imageCHIG = 'assets/chig.webp'
+                        const imageBERK = 'assets/berk.jpeg'
+                        const imageMIT = 'assets/mit.jpeg'
+                        const imagePRINCE = 'assets/prince.jpeg'
+                        const imageSTAN = 'assets/stan.jpeg'
+                        const imageYALE = 'assets/yale.webp'
+                        const imageCOL = 'assets/col.jpeg'
+                        const imageCORN = 'assets/corn.jpeg'
+                        const imageFLOR = 'assets/flor.jpeg'
+                        const imageTEX = 'assets/tex.jpeg'
+                        const imageNYC = 'assets/NYC.jpeg'
+                        const imageUWM = 'assets/uwm.webp'
                         const imageUCLA = 'assets/ucla4.jpeg'
                         const imagePORT = 'assets/portland2.jpeg'
                         let description = '';
 
                         if (isUW) {
                             description = `
-                                <img src="${imageSrc}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <img src="${imageSrc}" alt="University Image" style="max-width: 100%; height: auto class="popup-image" class="popup-content" height: auto;">
                                 <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
                                 <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
                                     <div class="popup-content">
@@ -139,6 +240,7 @@
                                         <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
                                         <p>October 27th:<p/>
                                         <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p>  An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>
                                         <p> November 30th:</p>
                                         <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
                                         <p>April 17th:</p>
@@ -169,10 +271,295 @@
                                 </div>
                                 `;
                             
-                        }  else {
+                        }  else if(isBERK) {
+                            description = `
+                            <img src="${imageBERK}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 25th:<p/>
+                                        <p>On October 26th around 400 students at Berkeley walked out in solidarity with Palestine. This rally was located at Sproul Plaza. The protesters called for a cease-fire and to divest from arms manufacturers that create weapons used by the Israel Defense Force. Many chants were made during the protest. For instance, one of them was “Israel, Israel, you can’t hide. We charge you with genocide”. This protest marked the start of many Berkeley students supporting the Palastinians in Gaza.<p/>
+                                        <p> November 27th:</p>
+                                        <p>On November 27th hundreds gathered at Berkeley to mourn the dead in Gaza and to call for a cease-fire. There was no evidence of counter-protesters at this Event.  Protesters hung up a Palestine flag on the Campanile bell tower as they chanted “Free, free Palestine”. This event shows the continued support of Palestine within the bay area.</p>
+                                        <p>Feb 27th:</p>
+                                        <p>Jewish student groups organized a private event that was shut down by pro-Palastinian protesters. The UC Berkeley police were called to evacuate the event as the demonstrators broke open the door and shattered a window. This demonstration consisted of around 200 protestors that came to disrupt this event.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isCHIG){
+                            description = `
+                            <img src="${imageCHIG}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isCORN){
+                            description = `
+                            <img src="${imageCORN}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isDUKE) {
+                            description = `
+                            <img src="${imageDUKE}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isFLOR){
+                            description = `
+                            <img src="${imageFLOR}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isHARV){
+                            description = `
+                            <img src="${imageHARV}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        }else if(isMIT) {
+                            description = `
+                            <img src="${imageMIT}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isNYC){
+                            description = `
+                            <img src="${imageNYC}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        }else if(isPL) {
+                            description = `
+                            <img src="${imagePORT}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isPRINCE){
+                            description = `
+                            <img src="${imagePRINCE}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isSTAN) {
+                            description = `
+                            <img src="${imageSTAN}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isTEX){
+                            description = `
+                            <img src="${imageTEX}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isUWM) {
+                            description = `
+                            <img src="${imageUWM}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isYALE) {
+                            description = `
+                            <img src="${imageYALE}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else if(isCOL)  {
+                            description = `
+                            <img src="${imageCOL}" alt="University Image" style="max-width: 100%; height: auto;">
+                                <h3 style="font-family: 'Oswald', sans-serif;">${name}</h3>
+                                <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
+                                    <div class="popup-content">
+                                        <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
+                                        <p>October 27th:<p/>
+                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
+                                        <p> November 30th:</p>
+                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
+                                        <p>April 17th:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                        <p>Novemebr 7th:</p>
+                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                    </div>
+                                </div>
+                                `;
+                        } else {
                             description = `<h3>${name}</h3>`; // For other colleges, just display the name
                         }
-
+ 
                         const popup = new mapboxgl.Popup({
                             anchor: 'top',
                             maxWidth: '400px'
