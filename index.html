@@ -3,11 +3,14 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Colleges Map</title>
+    <title>Documenting Major US Protests</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link href="https://fonts.googleapis.com/css?family=Titillium+Web|Oswald" rel="stylesheet">
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
             margin: 0;
@@ -22,130 +25,138 @@
             width: 100%;
         }
 
- 
-
         .popup-content {
             max-height: 200px;
             overflow-y: auto;
         }
 
         .sidebar {
-    width: 300px;
-    background-color: #11143baa;
-    color: #ffffff; 
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    padding: 20px;
-    overflow-y: auto;
-    font-family: 'Titillium Web', sans-serif; 
-    font-size: 14px; /* Reduced font size for paragraph text */
-    line-height: 1.4; /* Adjust line-height for improved readability */
-    margin-right: 10px; /* Added margin to the right for spacing */
-    padding-right: 10px; /* Added padding to the right for spacing */
-}
-
-.sidebar h2 {
-    font-size: 24px; 
-    margin-bottom: 20px; 
-}
-
-.sidebar-section {
-    margin-bottom: 20px; 
-}
-
-.sidebar-section h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.sidbar-text {
-    margin: 0; /* Reset margin to avoid extra spacing */
-    padding: 0; /* Reset padding to avoid extra spacing */
-}
-
-
-
-
-
-        .popup-content {
-            max-height: 200px; 
+            width: 300px;
+            background-color: #11143baa;
+            color: #ffffff;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            padding: 20px;
             overflow-y: auto;
-            margin: 0; 
-            padding: 0; 
+            font-family: 'Titillium Web', sans-serif;
+            font-size: 14px;
+            line-height: 1.4;
+            margin-right: 10px;
+            padding-right: 10px;
         }
 
-        .popup-image {
-            width: 100%; 
-            margin: 0; 
-            padding: 0; 
-            border-radius: 5px; 
+        .sidebar h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
         }
- 
-@keyframes slideIn {
-    from {
-        opacity: 0;
 
-    }
-    to {
-        opacity: 1;
+        .sidebar-section {
+            display: none;
+            margin-bottom: 20px;
+        }
 
-    }
-}
+        .sidebar-section.active {
+            display: block;
+        }
 
-.mapboxgl-popup {
-    animation: slideIn 0.3s ease-in-out;
-    opacity: 0;
-    animation-fill-mode: forwards; 
-  
-    background-color: transparent; 
-    max-width: 400px; 
-}
+        .sidebar-section h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
 
+        .sidbar-text {
+            margin: 0;
+            padding: 0;
+        }
 
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
 
+        .mapboxgl-popup {
+            animation: slideIn 0.3s ease-in-out;
+            opacity: 0;
+            animation-fill-mode: forwards;
+            background-color: transparent;
+            max-width: 400px;
+        }
 
-     
         .mapboxgl-popup.mapboxgl-popup-anchor-bottom {
             transform: translateY(100%);
         }
 
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
     </style>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
 </head>
 
 <body>
+
+
+
     <div id="map"></div>
     <div class="sidebar">
         <h2>Documenting Major University Protests in Support of Palestine or Israel</h2>
-    
-        <div class="sidebar-section">
+
+        <div id="introduction" class="sidebar-section active">
             <h3>Introduction</h3>
             <p class="sidbar-text">This interactive web map showcases the prominent universities across the United States and pinpoints locations where pro-Palestine and pro-Israel demonstrations have occurred. The map provides detailed information about major demonstrations on both sides, as documenting every protest instance proved impractical for this project. To identify significant protests, I considered two primary factors: the popularity of associated articles and the presence of multiple articles covering the event.</p>
         </div>
-    
-        <div class="sidebar-section">
+
+
+        <div id="limitations" class="sidebar-section">
             <h3>Limitations</h3>
             <p class="sidbar-text">As the sole contributor to this project, I encountered several limitations due to resource constraints. Firstly, not all major universities could be included. Secondly, sourcing reputable information for all university demonstrations proved challenging given the vast volume of articles on the subject. Lastly, reliance on available articles may have introduced potential inaccuracies into the data.</p>
         </div>
 
-        <div class="sidebar-section">
+        <div id="conclusion" class="sidebar-section">
             <h3>Conclusion</h3>
             <p class="sidbar-text">Among the protests I've documented, 40 have been in support of Palestine, while only 7 have supported Israel. This marks a significant 471% increase in pro-Palestinian demonstrations compared to those in support of Israel. These results were anticipated, given the prevailing political climate and media coverage on the topic.
 
                 One interesting aspect I've observed is how university administrations have handled these protests. Some have opted for upholding the law, while others have engaged in dialogue with students. However, many officials have faced backlash for their public statements on the conflict, which has fueled support for Palestine. Understanding the political climate is crucial for fostering productive discussions.
-                
-                I hope that students, faculty, and community members can unite to condemn violence and collaborate on building a better future. Despite tensions between pro-Palestinian and pro-Israeli groups, we share many commonalities as humans. It's my belief that focusing on these shared values can help foster unity. The media only tries to polarize people and that often can prevent productive conversations.
-                </p>
-        </div>
-    
-    
 
+                I hope that students, faculty, and community members can unite to condemn violence and collaborate on building a better future. Despite tensions between pro-Palestinian and pro-Israeli groups, we share many commonalities as humans. It's my belief that focusing on these shared values can help foster unity. The media only tries to polarize people and that often can prevent productive conversations.
+            </p>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                More Information
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" href="#" onclick="showSection('introduction')">Introduction</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showSection('limitations')">Limitations</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showSection('conclusion')">Conclusion</a></li>
+            </ul>
+        </div>
     </div>
 
     <script>
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.sidebar-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === sectionId) {
+                    section.classList.add('active');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            showSection('introduction');
+        });
         mapboxgl.accessToken = 'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
 
         var map = new mapboxgl.Map({
@@ -165,7 +176,7 @@
                     
                     colleges.features = colleges.features.filter(feature => feature.properties.COUNTRY === 'USA');
 
-                    const desiredUniversityNames = ['UNIVERSITY OF WASHINGTON-SEATTLE CAMPUS', 'PRINCETON UNIVERSITY', 'HARVARD UNIVERSITY', 'STANFORD UNIVERSITY', 'YALE UNIVERSITY',     'COLUMBIA UNIVERSITY IN THE CITY OF NEW YORK', 'CORNELL UNIVERSITY', 'UNIVERSITY OF CHICAGO', 'UNIVERSITY OF CALIFORNIA-BERKELEY', 'UNIVERSITY OF CALIFORNIA-LOS ANGELES',  'UNIVERSITY OF FLORIDA',  'THE UNIVERSITY OF TEXAS AT AUSTIN',   'UNIVERSITY OF WISCONSIN-MADISON'];
+                    const desiredUniversityNames = ['UNIVERSITY OF WASHINGTON-SEATTLE CAMPUS', 'PRINCETON UNIVERSITY', 'HARVARD UNIVERSITY', 'STANFORD UNIVERSITY', 'YALE UNIVERSITY',  'MASSACHUSETTS INSTITUTE OF TECHNOLOGY',   'COLUMBIA UNIVERSITY IN THE CITY OF NEW YORK', 'CORNELL UNIVERSITY', 'UNIVERSITY OF CHICAGO', 'UNIVERSITY OF CALIFORNIA-BERKELEY', 'UNIVERSITY OF CALIFORNIA-LOS ANGELES',  'UNIVERSITY OF FLORIDA',  'THE UNIVERSITY OF TEXAS AT AUSTIN',   'UNIVERSITY OF WISCONSIN-MADISON'];
                     colleges.features = colleges.features.filter(feature => desiredUniversityNames.includes(feature.properties.NAME));
 
                    
@@ -206,22 +217,22 @@
                         const isCHIG = name === 'UNIVERSITY OF CHICAGO';
                         const isPL = name === 'UNIVERSITY OF PORTLAND';
 
-                        const imageSrc = 'assets/About-main1.1.jpg';
-                        const imageHARV = 'assets/harv.jpeg'
+                        const imageSrc = 'assets/uw5pro.jpeg'; 
+                        const imageHARV = 'assets/harvpro.jpeg'
                         const imageDUKE = 'assets/duke.jpeg'
-                        const imageCHIG = 'assets/chig.webp'
-                        const imageBERK = 'assets/berk.jpeg'
-                        const imageMIT = 'assets/mit.jpeg'
-                        const imagePRINCE = 'assets/prince.jpeg'
-                        const imageSTAN = 'assets/stan.jpeg'
-                        const imageYALE = 'assets/yale.webp'
-                        const imageCOL = 'assets/col.jpeg'
-                        const imageCORN = 'assets/corn.jpeg'
-                        const imageFLOR = 'assets/flor.jpeg'
-                        const imageTEX = 'assets/tex.jpeg'
-                        const imageNYC = 'assets/NYC.jpeg'
-                        const imageUWM = 'assets/uwm.webp'
-                        const imageUCLA = 'assets/ucla4.jpeg'
+                        const imageCHIG = 'assets/uchigpro.jpeg'
+                        const imageBERK = 'assets/berkpro.jpeg'
+                        const imageMIT = 'assets/mitpro.jpeg'
+                        const imagePRINCE = 'assets/pricepro.jpeg'
+                        const imageSTAN = 'assets/stanpro.jpeg'
+                        const imageYALE = 'assets/yalepro.webp'
+                        const imageCOL = 'assets/colpro.jpeg'
+                        const imageCORN = 'assets/cornpro.webp'
+                        const imageFLOR = 'assets/florpro.jpeg'
+                        const imageTEX = 'assets/texpro.avif'
+                        const imageNYC = 'assets/nycpro.webp'
+                        const imageUWM = 'assets/uwmpro.jpeg'
+                        const imageUCLA = 'assets/uclapro.jpg'
                         const imagePORT = 'assets/portland2.jpeg'
                         let description = '';
 
@@ -254,16 +265,18 @@
                                 <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
                                     <div class="popup-content">
                                         <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
-                                        <p>October 27th:<p/>
-                                        <p>Several hundred people gather in Bruin Plaza and marched for Palestine. This march was organizaed by students for Justice in Palestine at UCLA. This event included speakers and chanting as protesters marched through UCLA campus. An article of this event is located here<p/>
-                                        <p>  An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>
-                                        <p> November 30th:</p>
-                                        <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
-                                        <p>April 17th:</p>
+                                        <p>October:<p/>
+                                        <p>Several hundred people gathered at UCLA's Bruin Plaza on Wednesday afternoon for a walkout and march supporting Palestine. This protest featured speeches, chanting, and a march to the Court of Sciences. The event was attended by private security, UCPD, and UCLA officials trained in de-escalation. Chants during the protest sparked concerns of antisemitism although organizers stated their intent was anti-Zionist and not antisemitic. Speakers called for an end to Israeli attacks in Gaza and for UC to divest from weapons manufacturers.<p/>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>
+                                        <p November:</p>
+                                        <p>Over one hundred protesters gathered at UCLA for a die-in demonstration organized by Students for Justice in Palestine. They aimed to honor Palestinians killed in Gaza and called for an end to what they see as university funding of war in the Middle East. The protestors laid down outside Royce Hall, reading out the names of the deceased. Speakers voiced solidarity with Palestine and criticized Israeli military actions.</p>
+                                        <p> An article of this event can be located <a href="https://www.uscannenbergmedia.com/2023/11/30/pro-palestinian-protesters-organize-die-in-on-ucla-campus/
+">here</a></p>
+                                        <p>April:</p>
                                         <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
-                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
-                                        <p>Novemebr 7th:</p>
-                                        <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                     </div>
                                 </div>
                                 `;
@@ -294,23 +307,22 @@
                                 <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
                                     <div class="popup-content">
                                         <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
-                                        <p>October 25th:<p/>
+                                        <p>October::<p/>
                                        
                                             
-                                        <p>On October 25th around 400 students at Berkeley walked out in solidarity with Palestine. This rally was located at Sproul Plaza. The protesters called for a cease-fire and to divest from arms manufacturers that create weapons used by the Israel Defense Force. Many chants were made during the protest. For instance, one of them was “Israel, Israel, you can’t hide. We charge you with genocide”. This protest marked the start of many Berkeley students supporting the Palastinians in Gaza.<p/>
+                                        <p>Over 400 students at UC Berkeley walked out of class to demand solidarity with Palestine amidst the ongoing Israel-Hamas conflict. The protesters called for a ceasefire and criticized UC Berkeley's stance. The protestors urged the university to divest from arms manufacturers supporting Israel. Student organizers led chants condemning Israeli actions while a few waved Israeli flags nearby. <p/>
                                         <p>An article of this event can be located <a href="https://www.berkeleyside.org/2023/10/25/students-walk-out-class-demanding-uc-berkeley-support-palestine">here</a></p>
-                                        <p> November 27th:</p>
-                                        <p>On November 27th hundreds gathered at Berkeley to mourn the dead in Gaza and to call for a cease-fire. There was no evidence of counter-protesters at this Event.  Protesters hung up a Palestine flag on the Campanile bell tower as they chanted “Free, free Palestine”. This event shows the continued support of Palestine within the bay area.</p>
-                                        <p>An article of this event can be located <a href="https://www.sfchronicle.com/bayarea/article/gaza-cease-fire-rally-uc-berkeley-draws-hundreds-18496270.php">here</a></p>
-                                        <p>Feb 27th:</p>
-                    
-                                        <p>Jewish student groups organized a private event that was shut down by pro-Palastinian protesters. The UC Berkeley police were called to evacuate the event as the demonstrators broke open the door and shattered a window. This demonstration consisted of around 200 protestors that came to disrupt this event.</p>
+                                        <p>Feburary:</p>
+                                        <p>UC Berkeley police evacuated a private event organized by Jewish student groups after pro-Palestinian demonstrators damaged property and posed a threat. About 200 protesters gathered outside and held signs and chanted slogans. The incident prompted university officials to cancel the event to ensure the safety of attendees. Ran Bar-Yoshafat an Israeli attorney and former military member was invited by pro-Israel student groups. </p>
                                         <p>An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                         <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
-                                        <p>March 11th</p>
-                                        
+                                        <p>March:</p>
                                         <p>Jewish students gathered at Berkeley and were able to have a successful rally on campus without confrontations. The students were asking for the administration to uphold their policies, make sure Jewish students can walk through the gates on campus and feel welcomed, and they called for equal rights for free speech. Palestinian protests have been blocking the gate with yellow tape and the University has been slow at making a response. They eventually took it down before this demonstration took place.</p>
                                         <p>An article of this event can be located <a href="https://abc7news.com/uc-berkeley-jewish-students-march-sather-gate/14514475/">here</a></p>
+                                        
                                         </div>
                                 </div>
                                 `;
@@ -321,15 +333,18 @@
                                 <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
                                     <div class="popup-content">
                                         <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
-                                        <p>November 11th:<p/>
-                                        <p>Protesters adopted a strategy that involved them protesting directly at admission tour groups. UCUP organized this rally and positioned themselves at locations frequented by the tour guides. UCUP is a coalition of campus groups including: CareNotCops, UChicago Students for Justice in Palestine, and UChicago Environmental Justice Task Force.<p/>
+                                        <p>November:<p/>
+                                        <p>UChicago United for Palestine (UCUP) shifted its protest strategy on Saturday by targeting campus tours, following the arrest of organizers at Rosenwald Hall. UCUP, a coalition of various student groups, positioned small groups of demonstrators along admissions tour routes, raising posters and chanting slogans to draw attention to their cause. Despite prior warnings from the admissions department, which rerouted tours to avoid disruptions, UCUP aimed to influence prospective students, parents, and donors with their message. The University reiterated its commitment to free speech, emphasizing that protests must not disrupt university activities. <p/>
                                             <p>An article of this event can be located <a href="https://chicagomaroon.com/40594/news/in-new-strategy-pro-palestine-demonstrators-protest-directly-to-admissions-tour-groups/">here</a></p>
-                                        <p> November 17th:</p>
-                                        <p>On November 17th students organized a staged sit-in at the admissions office to call for a public meeting with the president. The protesters demanded transparency around university investments and to divest from companies that send Israel weapons. Eventually 26 protesters and 2 faculty were arrested in this incident.</p>
+
+                                        <p>University of Chicago students, led by UChicago United for Palestine (UCUP), held a sit-in at the admissions office demanding transparency about the university's investments and divestment from companies supplying weapons to Israel. This protest led to the arrest of 26 students and two faculty members. The university has not disclosed current investments but previously included companies like Boeing and Raytheon. UCUP argues that investment decisions are inherently political and continues to push for divestment.</p>
                                         <p>An article of this event can be located <a href="https://southsideweekly.com/chicago-students-join-national-wave-of-pro-palestine-university-protests/">here</a></p>
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                         <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
-                                        <p>October 20th:</p>
-                                        <p>At University Chicago protests have erupted on both the Palestine and Israel side. Tensions were high as students from a coalition of UChicago Jewish students and Students for Justice in Palestine demonstrated on the quad next to each other. Both groups attempted to drown out the other by chanting their slogans. </p>
+                                        <p>October:</p>
+                                        <p>At the University of Chicago, protests have erupted from both pro-Palestinian and pro-Israeli groups. Tensions were high as UChicago Jewish students and Students for Justice in Palestine held demonstrations side by side on the quad, each group attempting to drown out the other with their chants.</p>
                                         <p>An article of this event can be located <a href="https://abc7chicago.com/university-of-chicago-protest-palestinian-israel/13946161/
                                     https://chicagomaroon.com/40177/news/emotions-run-high-on-quad-as-maroons-for-israel-and-sjp-stage-opposing-protests/
                                     ">here</a></p>
@@ -358,6 +373,9 @@
                                         <p>On March 21, 24 individuals at Cornell University began an indefinite sit-in at Day Hall, organized by the Coalition for Mutual Liberation (CML). They demand that Cornell call for a permanent ceasefire in Gaza and divest from weapons manufacturers implicated in a “plausible” genocide. Several students were arrested for trespassing during this sit-in.</p>
                                         <p>An article of this event can be located <a href="https://www.ithaca.com/news/ithaca/cornell-students-arrested-at-sit-in-protest-demanding-divestment-from-weapons-manufacturers-complicit-in-gaza/article_4030d536-e850-11ee-a3b2-c790bf24f7dc.html">here</a></p>
 
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                         <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
                                         <p>Apriil:</p>
                                        
@@ -379,6 +397,9 @@
                                         <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
                                         <p>April 17th:</p>
                                         <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                         <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
                                         <p>Novemebr 7th:</p>
                                         <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
@@ -392,16 +413,16 @@
                                 <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
                                     <div class="popup-content">
                                         <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
-                                        <p>October 25th:<p/>
-                                        <p>On October 25th over 150 pro-Palestinian protestors walked-out and called for a ceese-fire. During the protest one person tried to lead a chat of “Long Live Hamas!”. The protesters went silent until some condemned him and he left.<p/>
-                                            <p>An article of this event can be located <a href="https://www.wuft.org/politics/2023-10-26/pro-palestinian-walkout-at-the-university-of-florida-draws-residents-and-students">here</a></p>
-                                            <p> October 30th:</p>
-                                        <p>On October 30th protesters rallied on campus in support of Palestine and spoke out against the University support of Israel. This protest comes after Ron De Santis tried to ban a Palastin liberation group within the University. In January the federal court ruled officials do not intend to remove the Students for Justice in Palestine group
-</p>                                                                       <p>An article of this event can be located <a href="https://www.fsunews.com/story/news/2023/11/05/students-lead-pro-palestine-rally-criticize-university-on-israel/71442300007/">here</a></p>
-                                        <p>February 4th:</p>
+                                        <p>October:<p/>
+                                        <p>Over 150 pro-Palestinian protesters at the University of Florida held a walkout on Wednesday evening, demanding an end to the siege on Gaza, chanting “Free, Free Palestine”. Nas Salemeh, a Palestinian immigrant, expressed anguish over the ongoing conflict, attending with his family. Organizer Laila Fakhoury highlighted the significant involvement of Jewish community members. This event occurred in a context of heightened tensions on campus, including a recent talk by Ben Shapiro and a letter from UF President Ben Sasse supporting Israel.
+<p/>
+                                        <p>February:</p>
                                         <p>On Febuary 4th the UF Police Department was called to remove palestinian protesters from Reitz Union after they argued with a pro-Israel speaker. This event hosted a speaker Charlotte Korchak who is an outspoken supporter of Israel. The speech was co-sponsored by UF students supporting Israel and UF Hillel.</p>
                                         <p>An article of this event can be located <a href="https://www.alligator.org/article/2024/02/protesters-removed-from-reitz-union-during-israeli-speaker-event">here</a></p>
-                                           </div>
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>   
+                                        </div>
                                 </div>
                                 `;
                         } else if(isHARV){
@@ -422,6 +443,9 @@
                                         <p>Pro-Palestinian protesters at Harvard staged their second major rally, criticizing the school's handling of free speech amid efforts to combat antisemitism. They urged Senator Warren to vote against military aid to Israel. Organized by various groups, the rally drew over 200 attendees, marching to Warren's home. Despite policy restrictions, the Harvard University Palestine Solidarity Committee raised awareness of the event, denouncing what they perceived as disproportionate scrutiny from the administration. Despite recent crackdowns, protesters reaffirmed their commitment to activism for Palestine.</p>
                                         <p>An article of this event can be located <a href="https://www.washingtonexaminer.com/news/2851157/harvard-pro-palestine-protesters-repression-free-speech/">here</a></p>
 
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                     </div>
                                 </div>
                                 `;
@@ -437,7 +461,11 @@
                                         <p> November 30th:</p>
                                         <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
                                         <p>April 17th:</p>
+                                       
                                         <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                         <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
                                         <p>Novemebr 7th:</p>
                                         <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
@@ -457,6 +485,9 @@
                                         <p>This protest was called a die-in demontration as students lied down on bricks outside of Royce Hall. This demontration was held to reconize the Pa;estinians killed in Gaza. As students lied down on the bricks they chanted slogons of their movment. An article of this event is located here</p>
                                         <p>April 17th:</p>
                                         <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                         <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
                                         <p>Novemebr 7th:</p>
                                         <p>On November 7th Bruiens for Israel and Hillel at UCLA held a rally that hosted aproximently 200 people. This event included speakers, a march through campus, and chants of "Bring, bring our people back". This was the only rally for Israel at UCLA that I was able to find when scrapping the web when making this website. An article of this event is located  <a href="https://dailybruin.com/2023/11/07/jewish-organizations-at-ucla-host-rally-to-call-for-release-of-israeli-hostages">here</a></p>
@@ -495,7 +526,9 @@
                                             <p>January:</p>
                                         <p>Pro-Palestinian student activists held a walk-out rally outside Nassau Hall on Friday, demanding a ceasefire in Gaza and that Princeton University divest from companies associated with Israel’s military activities. About 100 people attended. The rally linked the Palestinian cause to broader issues of colonialism and oppression, with most speakers opposing a two-state solution. Speakers included Patrick Jaojoco from Students for Justice in Palestine and Sireen Sawalha, a Palestinian-American activist. Protesters reiterated demands for Princeton to disassociate from companies involved in Israel’s military actions and apartheid policies.</p>
                                         <p>An article of this event can be located <a href="https://www.dailyprincetonian.com/article/2024/02/princeton-news-adpol-palestine-protest-nassau-hall-ceasefire-divest-2024 ">here</a></p>
-
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                     </div>
                                 </div>
                                 `;
@@ -506,16 +539,18 @@
                                 <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
                                     <div class="popup-content">
                                         <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
-                                        <p>October 23rd:<p/>
+                                        <p>October:<p/>
                                         
-                                         <p>On October 23rd around 1,000 people gathered at White Plaza to call for Stanford to support Palestinian students and acknowledge war crimes committed by Israel. This rally was organized by Standford Students for Justice in Palestine. This demonstration consisted of many speakers and a march from White Plaza to Memorial Church.<p/>
+                                         <p>Nearly 1,000 people gathered at Stanford's White Plaza to demand university support for Palestinian students and opposition to Israeli actions in Gaza and the West Bank. Organized by Stanford Students for Justice in Palestine (SJP), the rally called for acknowledgment of Israeli war crimes, divestment from corporations profiting from the occupation, and condemnation of violence against Palestinian students. <p/>
                                         <p>An article of this event can be located <a href="https://stanforddaily.com/2023/10/23/hundreds-call-for-university-action-in-protest-for-palestine/">here</a></p>
-                                        <p> November 17th:</p>
-                                        <p>In an article published November 17th it stated that for the past 17 days around 24 students at Stanford have staged a sleep-in protest in solidarity with Palestinians in Gaza. This was a small encampment within the quad that was made up of several tents. This sleep-in garnered thousands of signatures from students, faculty, and Stanford alumni.</p>
-                                        <p>An article of this event can be located <a href="https://www.middleeasteye.net/news/israel-palestine-war-us-stanford-university-students-sit-in-gaza">here</a></p>
-                                        <p>February 15th:</p>
-                                        <p>In an article from February 15th Emily stated that the 100-day stalemate between the protesters and the administration has ended. Stanford issued a letter saying that they would enforce its ban on overnight camping. Stanford also agreed to meet with the student groups and hear their demands. Students came to an agreement to end the encampment by February 16th by nightfall.</p>
+                                        <p>After over 100 days of protest, pro-Palestine student demonstrators at Stanford University have agreed to end their overnight camping at White Plaza by Friday night. This protest called the "Sit In to Stop Genocide" began on October 20th to demand Stanford's support for a Gaza cease-fire and broader actions against Israel. The move to end overnight camping came after the university threatened enforcement of its ban on camping. Administrators and protesters reached an agreement with students agreeing to end camping by February 16th and the university committing to two meetings to hear their demands..</p>
                                         <p>An article of this event can be located <a href="https://www.paloaltoonline.com/news/2024/02/15/stanford-students-agree-to-end-pro-palestine-overnight-sit-in-after-university-threatens-crackdown/">here</a></p>
+                                        <p> November:</p>
+                                        <p>Over 27 days a group of over two dozen Stanford University students staged a sleep-in protest in solidarity with Palestinians in Gaza. They demanded the university divest from Israeli ventures, boycott Israeli academic institutions, and condemn Israel's occupation of Palestinian territories. The protest garnered attention and support, attracting alumni and circulating petitions. </p>
+                                        <p>An article of this event can be located <a href="https://www.middleeasteye.net/news/israel-palestine-war-us-stanford-university-students-sit-in-gaza">here</a></p>
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                     </div>
                                 </div>
                                 `;
@@ -526,18 +561,22 @@
                                         <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
                                             <div class="popup-content">
                                                 <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
-                                                <p>December 6th:</p>
+                                                <p>December:</p>
                                                 <p>On December 6th the Palestinian Solidarity Committee organized a walkout at the auditorium at the start of a speaker's presentation. The students felt that the speaker isn't supportive of Palestinians and believed the speakers should have not been asked to speak at the University. After several protesting incidents UT Austin said that students "crossed the line” and decided the launch an investigation into pro-Palestinian protesters.</p>
                                                 <p>An article of this event can be located <a href="https://www.kxan.com/news/local/austin/ut-austin-says-pro-palestinian-protesters-crossed-the-line-launches-investigation/">here</a></p>
-                                                <p>November 9th:</p>
-                                                <p>On November 9th around 200 hundred students walked out in solidarity with the people in Gaza. In this demonstration they called for the acknowledgement of Palestine and for UT to divest from arms manufacturers. Before this walkout Palestine Solidarity committee released a statement that was signed by over 30 student organizations.</p>
+                                                <p>November:</p>
+                                                <p>University of Texas students walked out of class to support Palestine, demanding the university acknowledge Palestinian, Muslim, and Arab students and divest from weapon manufacturers. Around 200 protesters gathered and began chanting and delivering statements to University President Jay Hartzell. Palestine Solidarity Committee member Mohammed Zakzok stressed that supporting Palestinian rights does not equate to antisemitism. Before this walkout Palestine Solidarity committee released a statement that was signed by over 30 student organizations.</p>
                                                 <p>An article of this event can be located <a href="https://thedailytexan.com/2023/11/09/students-walk-out-of-class-in-solidarity-with-palestine-in-protest-of-university-response-weapons-investment/">here</a></p>
-                                                <p>February 7th:</p>
-                                                <p>In an article from February 7th Kepner stated that 4 students would be punished for pro-Palestinian protests at the dean's office. This is from an incident where students protested for two teaching assistants to be reinstated. These TA’s were let go after they publicly released a pro-Palestinian message.</p>
+                                                <p>February:</p>
+                                                <p>In an article from February 7th Kepner stated that the University of Texas found four students in violation of school policy after they protested at the dean's office in December. The students were demanding the reinstatement of two teaching assistants reassigned for sending a pro-Palestinian message. The students were cited for disruptive conduct and unauthorized entry. No criminal charges have been filed, and the university emphasized that while free speech is protected, harassment and disruption are not tolerated.</p>
+                                       
                                                 <p>An article of this event can be located <a href="https://www.statesman.com/story/news/education/2024/02/07/4-university-of-texas-students-punished-for-pro-palestinian-activism/72426569007/">here</a></p>
+                                                <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                                 <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
-                                                <p>November 14th:</p>
-                                                <p>On November 14th the San Antonio chapter of Hillel made a display in support of the safe return of Israeli hostages. The display consisted of empty chairs that had a balloon attached and the chair also had a picture displayed of an Israel who was kidnapped.</p>
+                                                <p>November:</p>
+                                                <p>On November 14, the San Antonio chapter of Hillel, a Jewish student organization, organized a "Balloons of Hope '' display near the Sombrilla to show solidarity for the safe return of Israeli hostages. The display featured 10 rows of empty chairs, each with a balloon and a flier identifying Israeli hostages as "kidnapped." While Hillel students attended, they declined to be quoted, and the organization did not respond to media inquiries. This display prompted a counter-protest for supporting Palestine.</p>
                                                 <p>An article of this event can be located <a href="https://paisano-online.com/37822/news/pro-israel-display-depicts-those-kidnapped-during-conflict/">here</a></p>    
                                             </div>
                                         </div>
@@ -550,15 +589,18 @@
                                 <div class="popup-content" style="font-family: 'Titillium Web', sans-serif;">
                                     <div class="popup-content">
                                         <h4 style="color: #E15252;">Palestinian Demonstrations</h4>
-                                        <p>October 10th:<p/>
-                                        <p>Students at University of Wisconsin-Madison gathered for a pro-Palestine rally on campus on October 10th. Students chanted slogans including “Glory to the martyrs”, “Glory to the Resistance”, and “We will liberate the land by any means necessary”. <p/>
+                                        <p>October:<p/>
+                                        <p>On October 10, students at the University of Wisconsin-Madison participated in a rally where they chanted pro-Hamas slogans, including "Glory to the martyrs! Glory to the Resistance" and "We will liberate the land by any means necessary." The following day, UW-Madison Chancellor Jennifer L. Mnookin issued a statement condemning the recent Hamas attacks on Israeli civilians, expressing mourning for the victims and concern about the escalation of violence and its global repercussions. <p/>
                                             <p>An article of this event can be located <a href="https://www.campusreform.org/article/by-means-necessary-uw-madison-students-chant-pro-hamas-slogans-campus-rally/24160">here</a></p>    
-                                            <p> February 22nd:</p>
+                                            <p>February:</p>
                                         <p>In February pro-Palastinian protests hosted a demonstration to protest weapons manufactures at the engineering career fair. They also were calling for the UWPD to fire officers involved in an incident where an office shoved posters on February 13th. The protesters want UWM to ban on-campus recruitment by weapon manufacturing companies. The protesters also called for the resignation of administrative figures including Chancellor Jennifer Mnookin and Dean of Students Christian Olstad.</p>
                                         <p>An article of this event can be located <a href="https://www.dailycardinal.com/article/2024/02/pro-palestinian-protests-continue-against-uwpd-and-uw-madison-engineering-college">here</a></p>    
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                         <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
-                                        <p>Novemebr 7th:</p>
-                                        <p>On October 20th Badgers Against Hate organized a “Shabbat in Strength”’ This event was to show solidarity with Israel. Students performed songs and gave speeches supporting Israel, the Israel Defense Force, and their families.</p>
+                                        <p>October:</p>
+                                        <p>At an event on October 20, they organized a “Shabbat in Strength” where students performed songs and gave speeches expressing solidarity with Israel and the Israel Defense Forces. Speakers, including Jacob Bigelman and Alex Shohet, emphasized community support and the need to stand by Israel during these challenging times. The events highlighted fears and frustrations about the conflict and reaffirmed a commitment to stand with Israel. </p>
                                         <p>An article of this event can be located <a href="https://www.dailycardinal.com/article/2023/10/uw-madison-students-demonstrators-hold-second-week-of-rallies-for-israel-palestine">here</a></p>    
                                         </div>
                                 </div>
@@ -583,7 +625,9 @@
                                         <p>April:</p>
                                         <p>Yale graduate students began a hunger strike urging the university to divest from companies supporting Israel. They accused Yale of complicity in Gaza genocide and demanded divestment from arms firms. Yale's response emphasized free expression and peaceful protest. The students cited a precedent from 2006 when Yale divested from Sudan genocide-linked companies. Tensions on campuses have risen since the Israel-Hamas conflict, with increased anti-Semitic and Islamophobic incidents.</p>
                                         <p>An article of this event can be located <a href="https://www.thenationalnews.com/news/us/2024/04/12/pro-palestine-yale-students-to-hunger-strike-over-universitys-israel-arms-investments/">here</a></p>                          
-      
+                                        <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
                                     </div>
                                 </div>
                                 `;
@@ -601,8 +645,12 @@
                                         <p>At a rally on January 19, protesters from Columbia University's Students for Justice in Palestine (SJP) and Jewish Voice for Peace (JVP) were attacked with a chemical substance known as "skunk," commonly used by the Israel Defense Forces (IDF). The attack left many participants experiencing nausea, fatigue, and burning eyes, prompting hospital visits. Columbia administrators initially did not respond to the incident but later condemned it and announced an investigation by the Department of Public Safety and the NYPD. The alleged perpetrators have been barred from campus during the investigation, though one was reportedly seen on campus afterward.</p>
                                         <p>An article of this event can be located <a href="https://www.cbsnews.com/newyork/news/columbia-university-pro-palestinian-pro-israeli-protests/">here</a></p>  
                                         <p>April:</p>
+                                      
                                         <p>At Columbia University, police intervened and made several arrests during clashes between pro-Palestinian and pro-Israel protesters, leading to campus lockdowns. Columbia's President Minouche Shafik testified to Congress about balancing free speech with preventing antisemitism, amidst criticism of the university's handling of such incidents. The university faced scrutiny over a professor's controversial comments on Hamas, leading to an investigation. Protests continued with a pro-Palestinian tent city and confrontations with police, while Jewish students expressed fear and dissatisfaction with the university's response to antisemitism. /p>
-                                        <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
+                                            <p>May:</p>
+                                        <p>This was the start of the national movment of protest encampments at Universities. At UCLA there were hundreds of people who joined the encampment. Eventlly the encampment was cleared by the police after several hours of clashes between protesters and police. An article of this event is located here.</p>
+                                        <p> An article of this event can be located <a href="https://www.latimes.com/california/story/2024-02-27/pro-palestinian-protesters-shut-down-event-organized-by-jewish-students-at-uc-berkeley">here</a></p>  
+                                            <h4 style="color: #3FB1CE;">Israeli Demonstrations</h4>
                                         <p>October</p>
                                         <p>Around 100 students gathered at Columbia University to support Israel following Hamas' recent attacks. Organized by Students Supporting Israel (SSI), the event emphasized community unity and condemned the violence. University President Minouche Shafik expressed devastation over the attacks, while speakers highlighted efforts to avoid harming civilians and addressed rising antisemitism. The rally aimed to raise awareness, combat misinformation, and support Jewish students on campus. </p>
                                         <p>An article of this event can be located <a href="https://www.columbiaspectator.com/news/2023/10/11/students-supporting-israel-organizes-rally-following-attacks-on-israel/">here</a></p>  
@@ -629,10 +677,14 @@
             }
 
 
-            geojsonFetch();
-        });
-    </script>
 
+            geojsonFetch();
+
+        });
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 </html>
