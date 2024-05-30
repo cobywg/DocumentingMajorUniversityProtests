@@ -2,7 +2,7 @@
 
 This report documents the recent surge in political protests on university campuses across the United States. Protests have erupted since the Israeli military began bombing and invading the Gaza Strip after October 7th. This project aims to provide a comprehensive overview of these demonstrations by enhancing existing maps with detailed data on specific protests.
 
-The objective of this project is to provide a timeline of major protests, both pro-Palestinian and pro-Israeli, occurring from October 7th to the end of April. This report highlights the varying demands of protestors, from calling for an end to the war and severing ties with Israel to addressing antisemitism and advocating for the hostages' release.
+The objective of this project is to provide a timeline of major protests, both pro-Palestinian and pro-Israeli, occurring from October 7th to the end of May. This report highlights the varying demands of protestors, from calling for an end to the war and severing ties with Israel to addressing antisemitism and advocating for the hostages' release.
 
 To achieve my objective, I found a geospatial dataset from the Homeland Infrastructure Foundation-Level Data (HIFLD) portal that was used to map university locations. I selected 14 universities to analyze major protest activities that have taken place. The research for this project consisted of specific searches to document past and ongoing demonstrations to ensure a comprehensive understanding of the events.
 
