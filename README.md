@@ -47,3 +47,16 @@ This section provides an overview of the process I took to acquire the data. I w
 ## The Acquisition
 
 The data I used was downloaded from the Homeland Infrastructure Foundation-Level Data (HIFLD) portal. This is an open data portal that I was able to access and download a geojson data file. I integrated the data set within my Visual Studio Code environment in order to filter the data. Since I only planned on documenting a small amount of the data provided, I decided to do a filter selection based on the name of the university. The only problem I encountered when filtering the data was being able to find the current university. Since many universities in similar areas have similar names, I had to be precise when finding the correct university variables to be used.
+
+The data can be found [here](https://hifld-geoplatform.opendata.arcgis.com/datasets/0d7bedf9d582472e9ff7a6874589b545/explore).
+
+
+# Project limitations
+
+As the sole contributor to this project, I encountered several limitations due to resource constraints. Firstly, not all major universities could be included. Secondly, sourcing reputable information for all university demonstrations proved challenging given the vast volume of articles on the subject. Lastly, reliance on available articles may have introduced potential inaccuracies into the data.
+
+# Conclusion
+
+I've documented 49 pro-Palestinian protests compared to just 8 pro-Israel protests, reflecting a significant 512% increase in support for Palestine. This disparity was anticipated given the current political climate and the nature of media coverage. An interesting aspect is the varied responses from university administrations: some strictly upheld the law, while others engaged in constructive dialogue with students. Many officials, however, faced backlash for their public statements, which inadvertently fueled support for Palestine.
+
+Understanding the broader political context is essential for fostering meaningful discussions. I believe that students, faculty, and community members should unite in condemning violence and work collaboratively towards a better future. Despite the tensions between pro-Palestinian and pro-Israeli groups, we share many commonalities as humans. Emphasizing these shared values can help foster unity and understanding. Unfortunately, media often polarizes opinions, which can hinder productive conversations. By focusing on common ground, we can move towards a more harmonious and constructive dialogue.
